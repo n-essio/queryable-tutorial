@@ -2,7 +2,11 @@
 Un tutorial 
 
 ## Getting Started
-Abbiamo 3 tabelle su db, 3 entities, 3 servizi rest.
+Abbiamo 3 tabelle su db, 3 entities, 3 servizi rest:
+
+- Team (uuid, name, tags)
+- Developer (uuid, name, surname, team_uuid, active)
+- Project (uuid, name, budget, developers_uuid)
 
 
 ### Prerequisites
