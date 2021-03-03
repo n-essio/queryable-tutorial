@@ -205,12 +205,39 @@ To start the database:
 
 ```
  docker-compose -f docker/docker-compose.yml down
- docker-compose -f docker/docker-compose.yml up
+ docker-compose -f docker/docker-compose.yml up -d
 ```
 
 Ed infine:
 ```
- mvn   compile quarkus:dev
+ mvn compile quarkus:dev
 ```
+The logs:
 
+```
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------< it.queryable:myteam >-------------------------
+[INFO] Building myteam 1.0.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.12.1.Final:generate-code (default) @ myteam ---
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ myteam ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ myteam ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO]
+[INFO] --- quarkus-maven-plugin:1.12.1.Final:dev (default-cli) @ myteam ---
+Listening for transport dt_socket at address: 5005
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2021-03-04 00:52:39,721 INFO  [io.quarkus] (Quarkus Main Thread) myteam 1.0.0-SNAPSHOT on JVM (powered by Quarkus 1.12.1.Final) started in 2.894s. Listening on: http://localhost:8080
+2021-03-04 00:52:39,723 INFO  [io.quarkus] (Quarkus Main Thread) Profile dev activated. Live Coding activated.
+2021-03-04 00:52:39,723 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-postgresql, mutiny, narayana-jta, resteasy, resteasy-jackson, smallrye-context-propagation]
+```
 
