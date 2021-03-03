@@ -148,9 +148,14 @@ public class Project extends PanacheEntityBase {
     @Q
     public BigDecimal budget;
 
-    @QList
     @ElementCollection(fetch = FetchType.LAZY)
     public List<String> developers_uuid;
 
 }
+```
+
+And then:
+
+```
+./mvnw queryable:source
 ```
