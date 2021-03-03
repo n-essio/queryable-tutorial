@@ -40,3 +40,117 @@ Siamo pronti per definire i nostri JPA Entities:
 ./mvnw mvn it.n-ess.queryable:queryable-maven-plugin:1.0.6:add
 ./mvnw queryable:install
 ```
+Team entity:
+
+```
+package it.queryable.myteam.model;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import it.ness.queryable.annotations.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import static it.queryable.myteam.management.AppConstants.TEAMS_PATH;
+
+@Entity
+@Table(name = "teams")
+@QRs(TEAMS_PATH)
+@QOrderBy("name asc")
+public class Team extends PanacheEntityBase {
+
+    @Id
+    @Q
+    @QList
+    public String uuid;
+
+    @QLike
+    public String name;
+
+    @QLikeList
+    public String tags;
+}
+```
+
+
+```
+package it.queryable.myteam.model;
+
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import it.ness.queryable.annotations.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import static it.queryable.myteam.management.AppConstants.DEVELOPERS_PATH;
+
+//    Developer (uuid, name, surname, team_uuid, active)
+
+
+@Entity
+@Table(name = "developers")
+@QRs(DEVELOPERS_PATH)
+@QOrderBy("surname asc")
+public class Developer extends PanacheEntityBase {
+
+    @Id
+    @Q
+    @QList
+    public String uuid;
+
+    @QLike
+    public String name;
+
+    @QLike
+    public String surname;
+
+    @QList
+    public String team_uuid;
+
+    @QLogicalDelete
+    boolean active;
+}
+```
+
+
+```
+package it.queryable.myteam.model;
+
+
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import it.ness.queryable.annotations.*;
+
+import javax.persistence.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import static it.queryable.myteam.management.AppConstants.PROJECTS_PATH;
+
+// - Project (uuid, name, budget, developers_uuid)
+
+@Entity
+@Table(name = "projects")
+@QRs(PROJECTS_PATH)
+@QOrderBy("name asc")
+public class Project extends PanacheEntityBase {
+
+    @Id
+    @Q
+    @QList
+    public String uuid;
+
+    @QLike
+    public String name;
+
+    @Q
+    public BigDecimal budget;
+
+    @QList
+    @ElementCollection(fetch = FetchType.LAZY)
+    public List<String> developers_uuid;
+
+}
+```
