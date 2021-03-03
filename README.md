@@ -159,3 +159,58 @@ And then:
 ```
 ./mvnw queryable:source
 ```
+
+To test, we need to configure a database and all properties (in application.properties):
+
+```
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.username=myteam
+quarkus.datasource.password=myteam
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/myteam
+quarkus.hibernate-orm.database.generation=update
+```
+
+We will use a docker-compose.yml (in /docker folder):
+
+```
+version: '2'
+
+services:
+  postgresql:
+    container_name: myteam
+    image: postgres:11.8-alpine
+    environment:
+      POSTGRES_PASSWORD: myteam
+      POSTGRES_USER: myteam
+      POSTGRES_DB: myteam
+    ports:
+      - '5432:5432'
+  pgadmin4:
+    container_name: nso_orders_pgadmin4
+    image: dpage/pgadmin4
+    ports:
+      - '5050:5050'
+      - '85:80'
+    links:
+      - postgresql:postgresql
+    depends_on:
+      - postgresql
+    environment:
+      PGADMIN_DEFAULT_EMAIL: myteam@n-ess.it
+      PGADMIN_DEFAULT_PASSWORD: myteam
+
+```
+
+To start the database:
+
+```
+ docker-compose -f docker/docker-compose.yml down
+ docker-compose -f docker/docker-compose.yml up
+```
+
+Ed infine:
+```
+ mvn   compile quarkus:dev
+```
+
+
