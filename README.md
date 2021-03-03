@@ -28,6 +28,11 @@ Installiamo le estensioni Quarkus:
 Aggiungiamo Queryable e inizializziamo le api rest:
 
 ```
+./mvnw it.n-ess.queryable:queryable-maven-plugin:1.0.6:add-querable
+./mvnw queryable:install
+```
+Siamo pronti per definire i nostri JPA Entities:
+```
 ./mvnw mvn it.n-ess.queryable:queryable-maven-plugin:1.0.6:add
 ./mvnw queryable:install
 ```
