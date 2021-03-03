@@ -241,3 +241,97 @@ __  ____  __  _____   ___  __ ____  ______
 2021-03-04 00:52:39,723 INFO  [io.quarkus] (Quarkus Main Thread) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, jdbc-postgresql, mutiny, narayana-jta, resteasy, resteasy-jackson, smallrye-context-propagation]
 ```
 
+
+```
+/api/developers
+GET /api/developers
+Consumes: application/json
+Produces: application/json
+POST /api/developers
+Consumes: application/json
+Produces: application/json
+GET /api/developers//listSize
+Consumes: application/json
+Produces: application/json
+DELETE /api/developers//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/developers//{id}
+Consumes: application/json
+Produces: application/json
+PUT /api/developers//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/developers//{id}/exist
+Consumes: application/json
+Produces: application/json
+/api/greetings
+GET /api/greetings
+Consumes: application/json
+Produces: application/json
+POST /api/greetings
+Consumes: application/json
+Produces: application/json
+GET /api/greetings//listSize
+Consumes: application/json
+Produces: application/json
+DELETE /api/greetings//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/greetings//{id}
+Consumes: application/json
+Produces: application/json
+PUT /api/greetings//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/greetings//{id}/exist
+Consumes: application/json
+Produces: application/json
+/api/projects
+GET /api/projects
+Consumes: application/json
+Produces: application/json
+POST /api/projects
+Consumes: application/json
+Produces: application/json
+GET /api/projects//listSize
+Consumes: application/json
+Produces: application/json
+DELETE /api/projects//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/projects//{id}
+Consumes: application/json
+Produces: application/json
+PUT /api/projects//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/projects//{id}/exist
+Consumes: application/json
+Produces: application/json
+/api/teams
+GET /api/teams
+Consumes: application/json
+Produces: application/json
+POST /api/teams
+Consumes: application/json
+Produces: application/json
+GET /api/teams//listSize
+Consumes: application/json
+Produces: application/json
+DELETE /api/teams//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/teams//{id}
+Consumes: application/json
+Produces: application/json
+PUT /api/teams//{id}
+Consumes: application/json
+Produces: application/json
+GET /api/teams//{id}/exist
+Consumes: application/json
+Produces: application/json
+/myteam
+GET /myteam
+Produces: text/plain
+```
