@@ -169,7 +169,22 @@ public class Project extends PanacheEntityBase {
 }
 ```
 
-Per generare le classi REST ed i filtri Hibernate nei nostri entities, lanciamo il comando:
+Le rotte dei nostri microservizi le definiamo qui:
+
+```
+package it.queryable.myteam.management;
+
+public class AppConstants {
+public static final String API_PATH = "/api";
+public static final String DEVELOPERS_PATH = API_PATH + "/developers";
+public static final String GREETING_PATH = API_PATH + "/greetings";
+public static final String PROJECTS_PATH = API_PATH + "/projects";
+public static final String TEAMS_PATH = API_PATH + "/teams";
+}
+```
+
+
+### Per generare le classi REST ed i filtri Hibernate nei nostri entities, lanciamo il comando:
 
 ```
 ./mvnw queryable:source
