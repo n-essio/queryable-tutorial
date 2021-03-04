@@ -175,7 +175,7 @@ Per generare le classi REST ed i filtri Hibernate nei nostri entities, lanciamo 
 ./mvnw queryable:source
 ```
 
-Un esempio di filtri generati:
+#### Un esempio di filtri generati:
 
 ```
 @Entity
@@ -193,7 +193,7 @@ Un esempio di filtri generati:
 public class Team extends PanacheEntityBase {
 ```
 
-E nella classe REST:
+#### E nella classe REST:
 
 ```
 @Path(TEAMS_PATH)
@@ -278,7 +278,7 @@ quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/myteam
 quarkus.hibernate-orm.database.generation=update
 ```
 
-Nella cartella  /docker folder aggiungeremo il file docker-compose.yml :
+#### Nella cartella  /docker folder aggiungeremo il file docker-compose.yml :
 
 ```
 version: '2'
@@ -309,7 +309,7 @@ services:
 
 ```
 
-Possiamo quindi lanciare il nostro database:
+#### Possiamo quindi lanciare il nostro database:
 
 ```
  docker-compose -f docker/docker-compose.yml down
@@ -320,7 +320,7 @@ Ed infine:
 ```
  mvn compile quarkus:dev
 ```
-### Vedremo comparire nella shell, i seguenti logs:
+#### Vedremo comparire nella shell, i seguenti logs:
 
 ```
 [INFO] Scanning for projects...
@@ -389,7 +389,7 @@ e vedremo nella SHELL:
 2021-03-04 01:10:27,787 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/teams
 ```
 
-Proviamo a generare alcuni DEVELOPERS:
+#### Proviamo a generare alcuni DEVELOPERS:
 
 ```
 curl --location --request POST 'http://localhost:8080/api/developers' \
@@ -425,7 +425,7 @@ e vedremo nella SHELL:
 2021-03-04 01:17:34,267 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/developers
 ```
 
-A questo punto potremo provare qualche query:
+#### A questo punto potremo provare qualche query:
 
 ```
 http://localhost:8080/api/developers/5915fe2b-bb95-440a-b895-889de7f8808c
@@ -434,9 +434,9 @@ http://localhost:8080/api/developers?obj.team_uuid=081fa2b1-fffc-4797-81fc-cfb54
 
 ```
 
-Buon divertimento con QUARKUS & QUERYABLE.
+Buon divertimento con **QUARKUS & QUERYABLE**.
 
-Qualche link utile:
+##  Qualche link utile:
 - https://quarkus.io/guides/
 - https://quarkus.io/guides/rest-json
 - https://quarkus.io/guides/hibernate-orm-panache
