@@ -60,6 +60,9 @@ import static it.queryable.myteam.management.AppConstants.TEAMS_PATH;
 @QOrderBy("name asc")
 public class Team extends PanacheEntityBase {
 
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "uuid", unique = true)
     @Id
     @Q
     @QList
@@ -95,6 +98,9 @@ import static it.queryable.myteam.management.AppConstants.DEVELOPERS_PATH;
 @QOrderBy("surname asc")
 public class Developer extends PanacheEntityBase {
 
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "uuid", unique = true)
     @Id
     @Q
     @QList
@@ -137,6 +143,9 @@ import static it.queryable.myteam.management.AppConstants.PROJECTS_PATH;
 @QOrderBy("name asc")
 public class Project extends PanacheEntityBase {
 
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "uuid", unique = true)
     @Id
     @Q
     @QList
@@ -245,7 +254,7 @@ La lista degli endpoint (visibile scrivendo un path inesistente: http://localhos
 
 <img src="endpoint.png">
 
-Proviamo a generare un po' di dati:
+Proviamo a generare alcuni TEAMS:
 
 ```
 curl --location --request POST 'http://localhost:8080/api/teams' \
@@ -281,3 +290,30 @@ e vedremo nella SHELL:
 2021-03-04 01:10:27,787 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/teams
 ```
 
+Proviamo a generare alcuni DEVELOPERS:
+
+```
+curl --location --request POST 'http://localhost:8080/api/developers' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "fiorenzo",
+    "surname": "pizza",
+    "team_uuid": "081fa2b1-fffc-4797-81fc-cfb54a866fcf"
+}'
+
+curl --location --request POST 'http://localhost:8080/api/developers' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "andrea",
+    "surname": "rossi",
+    "team_uuid": "081fa2b1-fffc-4797-81fc-cfb54a866fcf"
+}'
+
+curl --location --request POST 'http://localhost:8080/api/developers' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "giovanni",
+    "surname": "rana",
+    "team_uuid": "081fa2b1-fffc-4797-81fc-cfb54a866fcf"
+}'
+```
