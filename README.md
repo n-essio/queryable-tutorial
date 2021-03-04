@@ -174,6 +174,90 @@ Per generare le classi REST ed i filtri Hibernate nei nostri entities, lanciamo 
 ```
 ./mvnw queryable:source
 ```
+
+Un esempio di filtri generati:
+
+```
+@Entity
+@Table(name = "teams")
+@QRs(TEAMS_PATH)
+@QOrderBy("name asc")
+@FilterDef(name = "like.tagses", parameters = @ParamDef(name = "tagses", type = "string"))
+@Filter(name = "like.tagses", condition = "lower(tagses) LIKE :tagses")
+@FilterDef(name = "obj.uuid", parameters = @ParamDef(name = "uuid", type = "string"))
+@Filter(name = "obj.uuid", condition = "uuid = :uuid")
+@FilterDef(name = "obj.uuids", parameters = @ParamDef(name = "uuids", type = "string"))
+@Filter(name = "obj.uuids", condition = "uuid IN (:uuids)")
+@FilterDef(name = "like.name", parameters = @ParamDef(name = "name", type = "string"))
+@Filter(name = "like.name", condition = "lower(name) LIKE :name")
+public class Team extends PanacheEntityBase {
+```
+
+E nella classe REST:
+
+```
+@Path(TEAMS_PATH)
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+@Singleton
+public class TeamServiceRs extends RsRepositoryServiceV3<Team, String> {
+
+	public TeamServiceRs() {
+		super(Team.class);
+	}
+
+	@Override
+	protected String getDefaultOrderBy() {
+		return "name asc";
+	}
+
+	@Override
+	public PanacheQuery<Team> getSearch(String orderBy) throws Exception {
+		String query = null;
+		Map<String, Object> params = null;
+		if (nn("like.tagses")) {
+			String[] tagses = get("like.tagses").split(",");
+			StringBuilder sb = new StringBuilder();
+			if (null == params) {
+				params = new HashMap<>();
+			}
+			for (int i = 0; i < tagses.length; i++) {
+				final String paramName = String.format("tags%d", i);
+				sb.append(String.format("tags LIKE :%s", paramName));
+				params.put(paramName, tagses[i]);
+				if (i < tagses.length - 1) {
+					sb.append(" OR ");
+				}
+			}
+			if (null == query) {
+				query = sb.toString();
+			} else {
+				query = query + " OR " + sb.toString();
+			}
+		}
+		PanacheQuery<Team> search;
+		Sort sort = sort(orderBy);
+		if (sort != null) {
+			search = Team.find(query, sort, params);
+		} else {
+			search = Team.find(query, params);
+		}
+		if (nn("obj.uuid")) {
+			search.filter("obj.uuid", Parameters.with("uuid", get("obj.uuid")));
+		}
+		if (nn("obj.uuids")) {
+			String[] uuids = get("obj.uuids").split(",");
+			getEntityManager().unwrap(Session.class).enableFilter("obj.uuids").setParameterList("uuids", uuids);
+		}
+		if (nn("like.name")) {
+			search.filter("like.name", Parameters.with("name", likeParamToLowerCase("like.name")));
+		}
+		return search;
+	}
+}
+```
+
+
 A questo punto verranno generate le classi REST nel package it/queryable/myteam/service/rs/: 
 
 - DeveloperServiceRs
