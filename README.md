@@ -1,6 +1,8 @@
 # Queryable tutorial
 Un tutorial in italiano per mostrare cosa si riesce a fare con QUARKUS ed il nostro Maven Plugin.
 
+<img src="https://github.com/n-essio/queryable/blob/main/docs/queryable.png">
+
 ## Getting Started
 Immaginiamo di voler gestire 3 tabelle nel nostro database Postgresql, che verranno mappate con 3 entities e sarannno interrogabili via rest tramite 3 servizi rest.
 
