@@ -1,15 +1,22 @@
-# queryable-tutorial
-Un tutorial 
+# Queryable tutorial
+Un tutorial in italiano per mostrare cosa si riesce a fare con QUARKUS ed il nostro Maven Plugin.
 
 ## Getting Started
-Abbiamo 3 tabelle su db, 3 entities, 3 servizi rest:
+Immaginiamo di voler gestire 3 tabelle nel nostro database Postgresql, che verranno mappate con 3 entities e sarannno interrogabili via rest tramite 3 servizi rest.
+
+I 3 entities:
 
 - Team (uuid, name, tags)
 - Developer (uuid, name, surname, team_uuid, active)
 - Project (uuid, name, budget, developers_uuid)
 
+Che saranno interrogabili (in GET, POST, PUT, DELETE), ai 3 indirizzi:
 
-### Prerequisites
+- http://localhost:8080/api/teams
+- http://localhost:8080/api/developers
+- http://localhost:8080/api/projects
+
+### Prerequisiti
 
 Cominciamo con la creazione di un progetto Quarkus, con le estensioni per Hibernate Panache, Resteasy e il ns Queryable. 
 Comandi maven da eseguire in sequenza
@@ -29,18 +36,15 @@ Installiamo le estensioni Quarkus:
 ./mvnw quarkus:add-extension -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache"
 ```
 
-Aggiungiamo Queryable e inizializziamo le api rest:
+Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 
 ```
 ./mvnw it.n-ess.queryable:queryable-maven-plugin:1.0.6:add-querable
 ./mvnw queryable:install
 ```
-Siamo pronti per definire i nostri JPA Entities:
-```
-./mvnw mvn it.n-ess.queryable:queryable-maven-plugin:1.0.6:add
-./mvnw queryable:install
-```
-Team entity:
+### Siamo pronti per definire i nostri JPA Entities.
+
+#### Team
 
 ```
 package it.queryable.myteam.model;
@@ -75,7 +79,7 @@ public class Team extends PanacheEntityBase {
     public String tags;
 }
 ```
-
+#### Developer
 
 ```
 package it.queryable.myteam.model;
@@ -119,7 +123,7 @@ public class Developer extends PanacheEntityBase {
     boolean active = true;
 }
 ```
-
+#### Project
 
 ```
 package it.queryable.myteam.model;
@@ -163,13 +167,22 @@ public class Project extends PanacheEntityBase {
 }
 ```
 
-And then:
+Per generare le classi REST ed i filtri Hibernate nei nostri entities, lanciamo il comando:
 
 ```
 ./mvnw queryable:source
 ```
+A questo punto verranno generate le classi REST nel package it/queryable/myteam/service/rs/: 
 
-To test, we need to configure a database and all properties (in application.properties):
+- DeveloperServiceRs
+- GreetingResource
+- GreetingServiceRs
+- ProjectServiceRs
+- TeamServiceRs
+
+Ed all'interno degli entities compariranno i filtri hibernate.
+
+Per testare il progetto, dobbiamo aggiungere la configurazione (in application.properties) al ns db di test - lanciatro utilizzando docker-compose:
 
 ```
 quarkus.datasource.db-kind=postgresql
@@ -179,7 +192,7 @@ quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/myteam
 quarkus.hibernate-orm.database.generation=update
 ```
 
-We will use a docker-compose.yml (in /docker folder):
+Nella cartella  /docker folder aggiungeremo il file docker-compose.yml :
 
 ```
 version: '2'
@@ -210,7 +223,7 @@ services:
 
 ```
 
-To start the database:
+Possiamo quindi lanciare il nostro database:
 
 ```
  docker-compose -f docker/docker-compose.yml down
@@ -221,7 +234,7 @@ Ed infine:
 ```
  mvn compile quarkus:dev
 ```
-The logs:
+### Vedremo comparire nella shell, i seguenti logs:
 
 ```
 [INFO] Scanning for projects...
@@ -254,7 +267,7 @@ La lista degli endpoint (visibile scrivendo un path inesistente: http://localhos
 
 <img src="endpoint.png">
 
-Proviamo a generare alcuni TEAMS:
+## Proviamo a generare alcuni TEAMS:
 
 ```
 curl --location --request POST 'http://localhost:8080/api/teams' \
@@ -327,4 +340,23 @@ e vedremo nella SHELL:
 ```
 
 A questo punto potremo provare qualche query:
+
+```
+http://localhost:8080/api/developers/5915fe2b-bb95-440a-b895-889de7f8808c
+http://localhost:8080/api/developers?like.surname=fi
+http://localhost:8080/api/developers?obj.team_uuid=081fa2b1-fffc-4797-81fc-cfb54a866fcf
+
+```
+
+Buon divertimento con QUARKUS & QUERYABLE.
+
+Qualche link utile:
+- https://quarkus.io/guides/
+- https://quarkus.io/guides/rest-json
+- https://quarkus.io/guides/hibernate-orm-panache
+- https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#pc-filter
+- https://github.com/n-essio/queryable
+
+
+
 
