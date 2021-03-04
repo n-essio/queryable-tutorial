@@ -116,7 +116,7 @@ public class Developer extends PanacheEntityBase {
     public String team_uuid;
 
     @QLogicalDelete
-    boolean active;
+    boolean active = true;
 }
 ```
 
