@@ -1,5 +1,5 @@
-# Queryable tutorial
-Un tutorial in italiano per mostrare cosa si riesce a fare con QUARKUS ed il nostro Maven Plugin.
+# 'Getting Started' con Quarkus & Queryable
+Un tutorial in italiano per mostrare come creare dei microservizi con QUARKUS utilizzando Queryable Maven Plugin.
 
 <img src="https://github.com/n-essio/queryable/blob/main/docs/queryable.png">
 
