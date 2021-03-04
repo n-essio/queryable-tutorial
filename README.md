@@ -317,3 +317,14 @@ curl --location --request POST 'http://localhost:8080/api/developers' \
     "team_uuid": "081fa2b1-fffc-4797-81fc-cfb54a866fcf"
 }'
 ```
+e vedremo nella SHELL:
+```
+2021-03-04 01:16:39,492 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/developers
+2021-03-04 01:17:10,242 INFO  [it.que.myt.ser.rs.DeveloperServiceRs_Subclass] (executor-thread-1) persist
+2021-03-04 01:17:10,248 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/developers
+2021-03-04 01:17:34,262 INFO  [it.que.myt.ser.rs.DeveloperServiceRs_Subclass] (executor-thread-1) persist
+2021-03-04 01:17:34,267 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/developers
+```
+
+A questo punto potremo provare qualche query:
+
