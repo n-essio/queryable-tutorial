@@ -425,7 +425,7 @@ e vedremo nella SHELL:
 2021-03-04 01:17:34,267 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/developers
 ```
 
-#### A questo punto potremo provare qualche query:
+#### A questo punto, qualche query REST:
 
 ```
 http://localhost:8080/api/developers/5915fe2b-bb95-440a-b895-889de7f8808c
