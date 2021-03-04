@@ -244,3 +244,40 @@ __  ____  __  _____   ___  __ ____  ______
 La lista degli endpoint (visibile scrivendo un path inesistente: http://localhost:8080/xxx
 
 <img src="endpoint.png">
+
+Proviamo a generare un po' di dati:
+
+```
+curl --location --request POST 'http://localhost:8080/api/teams' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "primo",
+    "tags": "java,angular"
+}'
+
+curl --location --request POST 'http://localhost:8080/api/teams' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "secondo",
+    "tags": "typescrypt,react"
+}'
+
+curl --location --request POST 'http://localhost:8080/api/teams' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "terzo",
+    "tags": "scala,react"
+}'
+```
+
+e vedremo nella SHELL:
+
+```
+2021-03-04 01:08:27,655 INFO  [it.que.myt.ser.rs.TeamServiceRs_Subclass] (executor-thread-1) persist
+2021-03-04 01:08:27,772 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/teams
+2021-03-04 01:10:20,104 INFO  [it.que.myt.ser.rs.TeamServiceRs_Subclass] (executor-thread-1) persist
+2021-03-04 01:10:20,109 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/teams
+2021-03-04 01:10:27,779 INFO  [it.que.myt.ser.rs.TeamServiceRs_Subclass] (executor-thread-1) persist
+2021-03-04 01:10:27,787 INFO  [it.que.api.fil.CorsFilter] (executor-thread-1) POST - /api/teams
+```
+
