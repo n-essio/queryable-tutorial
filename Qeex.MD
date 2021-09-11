@@ -273,5 +273,11 @@ quarkus.qeex.exceptions.103.it.message=sovrascrivo 103
 quarkus.qeex.exceptions.103.en.message=override 103
 ```
 
+## Notes
+
+- https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/6.4/html/development_guide/sect-jboss_logging_tools
+- https://javaee.github.io/javaee-spec/javadocs/javax/ws/rs/ext/ExceptionMapper.html
+- https://github.com/mkouba/gizmo-insights
+
 
 
