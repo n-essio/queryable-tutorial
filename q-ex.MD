@@ -1,4 +1,4 @@
-# 'Qeex' - Quarkus web application Error EXtension 
+# "Qeex" - Quarkus web application Error EXtension 
 
 Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
 - JBoss logging tools about the use of annotations inside a well knowed interface
