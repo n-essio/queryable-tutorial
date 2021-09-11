@@ -6,8 +6,8 @@ Strongly inspired by:
 
 This extension will provide:
 - jax-rs ExceptionMapper that will generate custom json exception messages, ie:
-```
 
+```
 HTTP STATUS: 500
 RESPONSE ENTITY:
 {
@@ -35,6 +35,14 @@ public class ExceptionMessage {
         this.id = id;
         this.message = message;
     }
+}
+```
+That Object will be this json:
+```
+{
+    "projectName": "XXXXX",
+    "code": 101,
+    "message": "yyyyyyy"                                                        
 }
 ```
 That message will be generated dinamically using a custom Exception:
@@ -68,8 +76,6 @@ Where:
 - "code" is the https code for the response
 -  "projectName" is bundle name of exceptions
 -  "message" is the exception message
-
-
 
 A custom ExceptionMapper that will generates Rest Response with inside out Messages:
 
