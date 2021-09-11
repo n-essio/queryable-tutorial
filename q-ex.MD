@@ -2,7 +2,6 @@
 
 - :red_circle:
 - :green_circle:
-- :1:
 - :Qeex:
 
 Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
@@ -34,11 +33,11 @@ That message will be generated dinamically using:
 
 ```
 public class QuarkusWebException extends Exception {
-    public String projectName;    // (1)
-    public int code;              // (2)
-    public int httpCode;          // (3)
-    public String message;        // (4)
-    public String language;       // (5)
+    public String projectName;    // (:one:)
+    public int code;              // (:two:)
+    public int httpCode;          // (:three:)
+    public String message;        // (:four:)
+    public String language;       // (:five:)
 
     public QEx(String projectName,
                int code,
