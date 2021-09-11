@@ -171,7 +171,7 @@ You can just configure the `quarkus-qex` extension by adding the following depen
 ```xml
 <dependency>
     <groupId>io.quarkiverse.qex</groupId>
-    <artifactId>quarkus-qex</artifactId>
+    <artifactId>quarkus-qeex</artifactId>
     <version>${latest.release.version}</version>
 </dependency>
 ```
