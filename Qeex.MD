@@ -123,7 +123,34 @@ public @interface Message {
 
 ```
 
-### How to use? 
+## Coordinates
+After configuring `quarkus BOM`:
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-bom</artifactId>
+            <version>${insert.newest.quarkus.version.here}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+You can just configure the `quarkus-qex` extension by adding the following dependency:
+
+```xml
+<dependency>
+    <groupId>io.quarkiverse.qex</groupId>
+    <artifactId>quarkus-qex</artifactId>
+    <version>${latest.release.version}</version>
+</dependency>
+```
+
+## Usage
 
 We can define our exceptions messages in 2 way:
 - using java annotations inside our code
