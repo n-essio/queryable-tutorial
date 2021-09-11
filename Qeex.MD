@@ -26,7 +26,7 @@ A custom ExceptionMessage that contains some utils fields to client:
 
 ```java
 public class ExceptionMessage {
-    public String projecte;
+    public String project;
     public int id;
     public String message;
 
