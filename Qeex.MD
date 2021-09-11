@@ -13,12 +13,12 @@ A custom ExceptionMessage that contains some utils fields to client:
 ```
 public class ExceptionMessage {
     public String projectName;
-    public int code;
+    public int id;
     public String message;
 
-    public ExceptionMessage(String projectName, int code, String message) {
+    public ExceptionMessage(String projectName, int id, String message) {
         this.projectName = projectName;
-        this.code = code;
+        this.id = id;
         this.message = message;
     }
 }
@@ -28,28 +28,34 @@ That message will be generated dinamically using a custom Exception:
 ```
 public class QuarkusWebException extends Exception {
     public String projectName;    // (:one:)
-    public int code;              // (:two:)
-    public int httpCode;          // (:three:)
+    public int id;              // (:two:)
+    public int code;          // (:three:)
     public String message;        // (:four:)
 
     public QuarkusWebException(String projectName,
+               int id,
                int code,
-               int httpCode,
                String message) {
         super();
         this.projectName = projectName;
+        this.id = id;
         this.code = code;
-        this.httpCode = httpCode;
         this.message = message;
     }
     
     public ExceptionMessage msg() {
-        return new ExceptionMessage(this.projectName, this.code, this.message, this.language);
+        return new ExceptionMessage(this.projectName, this.id, this.message);
     }
-
 
 }
 ```
+Where:
+- "id" is the uuid of message exception
+- "code" is the https code for the response
+-  "projectName" is bundle name of exceptions
+-  "message" is the exception message
+
+
 
 A custom ExceptionMapper that will generates Rest Response with inside out Messages:
 
@@ -63,15 +69,15 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class QuarkusWebExceptionProvider implements ExceptionMapper<QuarkusWebException> {
 
-    @Context
-    UriInfo uriInfo;
+  //  @Context
+  //  UriInfo uriInfo;
 
     @Override
     public Response toResponse(QuarkusWebException exception) {
         exception.printStackTrace();
-        String language = uriInfo.getQueryParameters().getFirst("language");
+       // String language = uriInfo.getQueryParameters().getFirst("language");
         return Response
-                .status(exception.httpCode)
+                .status(exception.code)
                 .entity(exception.msg())
                 .build();
     }
@@ -95,7 +101,7 @@ public @interface ExceptionBundle {
 
     String projectCode();
     int id() default 100;
-    int code() default 402;
+    int code() default 400;
 }
 
 ```
@@ -117,7 +123,7 @@ public @interface Message {
 
     int id() default -1;
     String message();
-    int code() default 402;
+    int code() default 400;
 
 }
 
@@ -165,10 +171,10 @@ In our proiject, we will create a class annotated with @ExceptionBundle Annotati
 @ExceptionBundle(projectCode = "QEEX")
 public interface AllExceptions {
 
-    @Message(id= 101, message = "simpe exception for client", code=402)
+    @Message(id= 101, message = "simpe exception for client", code=500)
     QuarkusWebException simpleException();
     
-    @Message(id= 102, message = "simpe exception for client", code=402)
+    @Message(id= 102, message = "simpe exception for client", code=503)
     QuarkusWebException complexException();
 
 }
@@ -191,7 +197,7 @@ public class GreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello() throws QEx {
+    public String hello() throws Exception {
         throw allExceptions.simpleException();
     }
 }
@@ -208,7 +214,7 @@ The client will receive with HttpCode 402, and a message as:
 
 ### Application properties declarations
 
-In alternative we can define messages inside quarkus application.properties :
+We can define messages inside quarkus application.properties :
 
 
 ```
@@ -219,13 +225,13 @@ import it.ness.qeex.annotations.QuarkusWebException;
 @ExceptionBundle(projectCode = "FLW")
 public interface AllExceptions {
 
-    @Message(code= 101)
-    QuarkusWebException simpleException();
+    @Message(id= 101)
+    QuarkusWebException simpleException101();
     
-    @Message(code= 102)
+    @Message(id= 102)
     QuarkusWebException simpleException102();
     
-    @Message(code= 103, httpCode=405, message="all inside java code")
+    @Message(id= 103)
     QuarkusWebException simpleException103();
 
 }
@@ -238,11 +244,9 @@ quarkus.qeex.projectCode=FLW
 quarkus.qeex.default.id=100
 quarkus.qeex.default.code=500
 
-quarkus.qeex.exceptions.101.message=semplice eccezione
-quarkus.qeex.exceptions.101.httpCode=402
-
+quarkus.qeex.exceptions.101.message=semplice eccezione 101
 quarkus.qeex.exceptions.102.message=semplice eccezione 102
-quarkus.qeex.exceptions.103.message=sovrascrivo 103
+quarkus.qeex.exceptions.103.message=semplice eccezione 103
 ```
 
 ## Notes
