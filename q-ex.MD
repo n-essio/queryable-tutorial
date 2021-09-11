@@ -33,7 +33,7 @@ That message will be generated dinamically using:
 
 ```
 public class QuarkusWebException extends Exception {
-    public String projectName;  // ```    (:one:) ```
+    public String projectName;    // (:one:)
     public int code;              // (:two:)
     public int httpCode;          // (:three:)
     public String message;        // (:four:)
