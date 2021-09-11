@@ -7,9 +7,9 @@ Strongly inspired by:
 This extension will provide:
 - jax-rs ExceptionMapper that will generate custom json exception messages, ie:
 
-```
 HTTP STATUS: 500
 RESPONSE ENTITY:
+```json
 {
     "projectName": "XXXXX",
     "code": 101,
@@ -38,7 +38,7 @@ public class ExceptionMessage {
 }
 ```
 That Object will be this json:
-```
+```json
 {
     "projectName": "XXXXX",
     "code": 101,
@@ -225,7 +225,7 @@ public class GreetingResource {
 ```
 The client will receive with HttpCode 402, and a message as:
 
-```
+```json
     {
         "projectName": "QEEX",
         "code": 101,
