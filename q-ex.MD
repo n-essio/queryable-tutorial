@@ -195,7 +195,7 @@ import it.ness.qex.annotations.QEx;
 @ExceptionBundle(projectCode = "FLW")
 public interface AllExceptions {
 
-    @Message(value = "prova")
+    @Message(code= 123, message = "prova", httpCode=402)
     QEx simpleException();
 
 }
@@ -212,9 +212,16 @@ and we will use in our project in this way:
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() throws QEx {
         throw allExceptions.simpleException();
-//        return "Hello RESTEasy";
     }
 ```
+The client will receive with httpCode 402, and a message as:
+
+{
+        projectName ='quarkus';
+        code = 134;
+        message = 2                                                              w;
+        language = language;
+}
 
 What do you t
 
