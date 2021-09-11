@@ -37,7 +37,7 @@ public class ExceptionMessage {
     }
 }
 ```
-That Object will be this json:
+That Object will be translated in json:
 ```json
 {
     "project": "XXXXX",
