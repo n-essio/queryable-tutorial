@@ -189,25 +189,21 @@ We will create a class annotated with ExceptionBundle Annotation, that at runtim
 
 ```
 
-import it.ness.qex.annotations.ExceptionBundle;
-import it.ness.qex.annotations.Message;
-import it.ness.qex.annotations.QEx;
 
 @ExceptionBundle(projectCode = "FLW")
 public interface AllExceptions {
 
     @Message(code= 123, message = "simpe exception for client", httpCode=402)
-    QEx simpleException();
+    QuarkusWebException simpleException();
     
     @Message(code= 12333, message = "simpe exception for client", httpCode=402)
-    QEx simpleException();
+    QuarkusWebException simpleException();
 
 }
 ```
 and we will use in our project in this way:
 
 ```
-
 
     @Inject
     AllExceptions allExceptions;
@@ -224,7 +220,7 @@ The client will receive with httpCode 402, and a message as:
         projectName ='quarkus';
         code = 134;
         message = 2                                                              w;
-        language = language;
+        language = IT;
 }
 
 
@@ -242,24 +238,36 @@ import it.ness.qex.annotations.QEx;
 @ExceptionBundle(projectCode = "FLW")
 public interface AllExceptions {
 
-    @Message(code= 123)
-    QEx simpleException();
+    @Message(code= 101)
+    QuarkusWebException simpleException();
+    
+    @Message(code= 102)
+    QuarkusWebException simpleException102();
+    
+    @Message(code= 103, httpCode=405, message="all inside java code")
+    QuarkusWebException simpleException103();
 
 }
 ```
 
-and define all messages in application properties:
-
+and we can define all error messages in application properties:
 
 ```
 quarkus.qeex.projectCode=FLW
-quarkus.qeex.default.httpCode=402
+quarkus.qeex.default.code=100
+quarkus.qeex.default.httpCode=500
 quarkus.qeex.default.language=it
 
-quarkus.qeex.exceptions.123.it.message=semplice eccezione
-quarkus.qeex.exceptions.123.it.httpCode=402
-quarkus.qeex.exceptions.123.en.message=sample exception
-quarkus.qeex.exceptions.123.en.httpCode=402
+quarkus.qeex.exceptions.101.it.message=semplice eccezione
+quarkus.qeex.exceptions.101.it.httpCode=402
+quarkus.qeex.exceptions.101.en.message=sample exception
+quarkus.qeex.exceptions.101.en.httpCode=402
+
+quarkus.qeex.exceptions.102.it.message=semplice eccezione 102
+quarkus.qeex.exceptions.102.en.message=sample exception 102
+
+quarkus.qeex.exceptions.103.it.message=sovrascrivo 103
+quarkus.qeex.exceptions.103.en.message=override 103
 ```
 
 
