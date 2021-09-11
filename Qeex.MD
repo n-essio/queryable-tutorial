@@ -1,10 +1,10 @@
 # "Qeex"- Quarkus web application Error EXtension
 
-
-Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
-- JBoss logging tools about the use of annotations inside a well knowed interface
-- T extends javax.ws.rs.WebApplicationException
-- javax.ws.rs.ext.ExceptionMapper to generate custom rest Exception 
+This is a Quarkus extension for generate Rest Exception in declarative way.
+Strongly inspired by:
+- JBoss logging tools - about the use of annotations inside an annotated interface
+- jax-rs WebApplicationException
+- jax-rs ExceptionMapper to provide customs Exceptions
 
 ## What the extension offers by design
 
