@@ -1,4 +1,4 @@
-# "Qeex" - Quarkus web application Error EXtension  :green_circle: :white_circle: :red_circle:
+# "Qeex"- Quarkus web application Error EXtension
 
 
 Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
@@ -226,4 +226,6 @@ quarkus.qeex.exceptions.103.message=sovrascrivo 103
 - https://github.com/ikatyang/emoji-cheat-sheet/blob/master/README.md#alphanum
 
 
-
+:green_circle: :white_circle: :red_circle:
+:green_circle: :white_circle: :red_circle:
+:green_circle: :white_circle: :red_circle:
