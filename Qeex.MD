@@ -6,7 +6,7 @@ Quarkus extension to generate Rest Exception in declative way. Strongly inspired
 - T extends javax.ws.rs.WebApplicationException
 - javax.ws.rs.ext.ExceptionMapper to generate custom rest Exception 
 
-## Getting Started
+## Idea
 
 Immagine that you defined a custom ExceptionMessage that contains some utils fields to client:
 
@@ -15,14 +15,11 @@ public class ExceptionMessage {
     public String projectName;
     public int code;
     public String message;
-    public String language;
 
-
-    public ExceptionMessage(String projectName, int code, String message, String language) {
+    public ExceptionMessage(String projectName, int code, String message) {
         this.projectName = projectName;
         this.code = code;
         this.message = message;
-        this.language = language;
     }
 }
 ```
@@ -34,23 +31,20 @@ public class QuarkusWebException extends Exception {
     public int code;              // (:two:)
     public int httpCode;          // (:three:)
     public String message;        // (:four:)
-    public String language;       // (:five:)
 
-    public QEx(String projectName,
+    public QuarkusWebException(String projectName,
                int code,
                int httpCode,
-               String message,
-               String languag) {
+               String message) {
         super();
         this.projectName = projectName;
         this.code = code;
         this.httpCode = httpCode;
         this.message = message;
-        this.language = language;
     }
     
-    public ExceptionMessage to() {
-      return new ExceptionMessage(this.projectName, this.code, this.message, this.language);
+    public ExceptionMessage msg() {
+        return new ExceptionMessage(this.projectName, this.code, this.message, this.language);
     }
 
 
@@ -60,19 +54,25 @@ public class QuarkusWebException extends Exception {
 In JaxRS you can define an ExceptionMapper
 
 ```
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
 public class QuarkusWebExceptionProvider implements ExceptionMapper<QuarkusWebException> {
 
+    @Context
+    UriInfo uriInfo;
+
     @Override
     public Response toResponse(QuarkusWebException exception) {
         exception.printStackTrace();
+        String language = uriInfo.getQueryParameters().getFirst("language");
         return Response
-                .status(exception.httpCode)     // (1)
-                .entity(exception.to())         // (2)
+                .status(exception.httpCode)
+                .entity(exception.msg())
                 .build();
     }
 }
@@ -160,6 +160,7 @@ and we will use in our project in this way:
     public String hello() throws QEx {
         throw allExceptions.simpleException();
     }
+    
 ```
 The client will receive with httpCode 402, and a message as:
 
@@ -177,7 +178,6 @@ The alternative use is:
 
 
 ```
-
 import it.ness.qex.annotations.ExceptionBundle;
 import it.ness.qex.annotations.Message;
 import it.ness.qex.annotations.QEx;
