@@ -223,7 +223,6 @@ The client will receive with httpCode 402, and a message as:
         language = language;
 }
 
-What do you t
 
 ### Application properties declarations
 
