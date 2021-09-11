@@ -11,7 +11,7 @@ HTTP STATUS: 500
 RESPONSE ENTITY:
 ```json
 {
-    "projectName": "XXXXX",
+    "project": "XXXXX",
     "code": 101,
     "message": "simpe message for client"                                                        
 }
@@ -26,12 +26,12 @@ A custom ExceptionMessage that contains some utils fields to client:
 
 ```java
 public class ExceptionMessage {
-    public String projectName;
+    public String projecte;
     public int id;
     public String message;
 
-    public ExceptionMessage(String projectName, int id, String message) {
-        this.projectName = projectName;
+    public ExceptionMessage(String project, int id, String message) {
+        this.project = project;
         this.id = id;
         this.message = message;
     }
@@ -40,7 +40,7 @@ public class ExceptionMessage {
 That Object will be this json:
 ```json
 {
-    "projectName": "XXXXX",
+    "project": "XXXXX",
     "code": 101,
     "message": "yyyyyyy"                                                        
 }
@@ -49,24 +49,24 @@ That message will be generated dinamically using a custom Exception:
 
 ```java
 public class QuarkusWebException extends Exception {
-    public String projectName;    // (:one:)
+    public String project;    // (:one:)
     public int id;              // (:two:)
     public int code;          // (:three:)
     public String message;        // (:four:)
 
-    public QuarkusWebException(String projectName,
+    public QuarkusWebException(String project,
                int id,
                int code,
                String message) {
         super();
-        this.projectName = projectName;
+        this.project = project;
         this.id = id;
         this.code = code;
         this.message = message;
     }
     
     public ExceptionMessage msg() {
-        return new ExceptionMessage(this.projectName, this.id, this.message);
+        return new ExceptionMessage(this.project, this.id, this.message);
     }
 
 }
@@ -74,7 +74,7 @@ public class QuarkusWebException extends Exception {
 Where:
 - "id" is the uuid of message exception
 - "code" is the https code for the response
--  "projectName" is bundle name of exceptions
+-  "project" is bundle name of exceptions
 -  "message" is the exception message
 
 A custom ExceptionMapper that will generates Rest Response with inside out Messages:
@@ -119,7 +119,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ExceptionBundle {
 
-    String projectCode();
+    String project();
     int id() default 100;
     int code() default 400;
 }
@@ -188,7 +188,7 @@ In our proiject, we will create a class annotated with @ExceptionBundle Annotati
 
 ```java
 
-@ExceptionBundle(projectCode = "QEEX")
+@ExceptionBundle(project = "QEEX")
 public interface AllExceptions {
 
     @Message(id= 101, message = "simpe exception for client", code=500)
@@ -227,7 +227,7 @@ The client will receive with HttpCode 402, and a message as:
 
 ```json
     {
-        "projectName": "QEEX",
+        "project": "QEEX",
         "code": 101,
         "message": "simpe exception for client"                                                        
     }
@@ -243,7 +243,7 @@ import it.ness.qeex.annotations.ExceptionBundle;
 import it.ness.qeex.annotations.Message;
 import it.ness.qeex.annotations.QuarkusWebException;
 
-@ExceptionBundle(projectCode = "FLW")
+@ExceptionBundle(project = "FLW")
 public interface AllExceptions {
 
     @Message(id= 101)
@@ -261,7 +261,7 @@ public interface AllExceptions {
 and we can define all error messages in application properties:
 
 ```properties
-quarkus.qeex.projectCode=FLW
+quarkus.qeex.project=FLW
 quarkus.qeex.default.id=100
 quarkus.qeex.default.code=500
 
