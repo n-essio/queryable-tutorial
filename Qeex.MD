@@ -24,7 +24,7 @@ TODO:
 
 A custom ExceptionMessage that contains some utils fields to client:
 
-```
+```java
 public class ExceptionMessage {
     public String projectName;
     public int id;
@@ -47,7 +47,7 @@ That Object will be this json:
 ```
 That message will be generated dinamically using a custom Exception:
 
-```
+```java
 public class QuarkusWebException extends Exception {
     public String projectName;    // (:one:)
     public int id;              // (:two:)
@@ -79,7 +79,7 @@ Where:
 
 A custom ExceptionMapper that will generates Rest Response with inside out Messages:
 
-```
+```java
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -105,7 +105,7 @@ public class QuarkusWebExceptionProvider implements ExceptionMapper<QuarkusWebEx
 ```
 In "Jboss Annotation tool" style, the extension define two custom annotations @ExceptionBundle and @Message:
 
-```
+```java
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -128,7 +128,7 @@ public @interface ExceptionBundle {
 
 We need also to define:
 
-```
+```java
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
@@ -186,7 +186,7 @@ We can define our exceptions messages in 2 way:
 
 In our proiject, we will create a class annotated with @ExceptionBundle Annotation ( the extension, at runtime, will generate a concrete "AllExceptionsImplementation" with all methods annotated:
 
-```
+```java
 
 @ExceptionBundle(projectCode = "QEEX")
 public interface AllExceptions {
@@ -201,7 +201,7 @@ public interface AllExceptions {
 ```
 We will @Inject in our Rest Services methods:
 
-```
+```java
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -238,7 +238,7 @@ The client will receive with HttpCode 402, and a message as:
 We can define messages inside quarkus application.properties :
 
 
-```
+```java
 import it.ness.qeex.annotations.ExceptionBundle;
 import it.ness.qeex.annotations.Message;
 import it.ness.qeex.annotations.QuarkusWebException;
@@ -260,7 +260,7 @@ public interface AllExceptions {
 
 and we can define all error messages in application properties:
 
-```
+```properties
 quarkus.qeex.projectCode=FLW
 quarkus.qeex.default.id=100
 quarkus.qeex.default.code=500
