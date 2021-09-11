@@ -6,9 +6,9 @@ Quarkus extension to generate Rest Exception in declative way. Strongly inspired
 - T extends javax.ws.rs.WebApplicationException
 - javax.ws.rs.ext.ExceptionMapper to generate custom rest Exception 
 
-## Idea
+## What the extension offers by design
 
-Immagine that you defined a custom ExceptionMessage that contains some utils fields to client:
+A custom ExceptionMessage that contains some utils fields to client:
 
 ```
 public class ExceptionMessage {
@@ -23,7 +23,7 @@ public class ExceptionMessage {
     }
 }
 ```
-That message will be generated dinamically using:
+That message will be generated dinamically using a custom Exception:
 
 ```
 public class QuarkusWebException extends Exception {
@@ -51,7 +51,7 @@ public class QuarkusWebException extends Exception {
 }
 ```
 
-In JaxRS you can define an ExceptionMapper
+A custom ExceptionMapper that will generates Rest Response with inside out Messages:
 
 ```
 import javax.ws.rs.core.Context;
@@ -77,7 +77,7 @@ public class QuarkusWebExceptionProvider implements ExceptionMapper<QuarkusWebEx
     }
 }
 ```
-In style of Jboss Annottaion toool, we will define two custom annotations:
+In "Jboss Annotation tool" style, the extension define two custom annotations @ExceptionBundle and @Message:
 
 ```
 import java.lang.annotation.Documented;
@@ -94,7 +94,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ExceptionBundle {
 
     String projectCode();
-    int code();
+    int id() default 100;
+    int code() default 402;
 }
 
 ```
@@ -109,48 +110,54 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-/**
- * Assigns a message string to a resource method.  The method arguments are used to supply the positional parameter
- * values for the method.
- *
- * @author <a href="mailto:david.lloyd@redhat.com">David M. Lloyd</a>
- */
 @Target(METHOD)
 @Retention(CLASS)
 @Documented
 public @interface Message {
 
-    int id() default INHERIT;
-    String value();
+    int id() default -1;
+    String message();
+    int code() default 402;
 
 }
 
 ```
-How to use? Follows the 2 way:
-- using annotations
-- using application properties
+
+### How to use? 
+
+We can define our exceptions messages in 2 way:
+- using java annotations inside our code
+- using annotations and defining properties in the quarkus application.properties
 
 ### Annotations use cases
 
-We will create a class annotated with ExceptionBundle Annotation, that at runtime will have the Implementation
+In our proiject, we will create a class annotated with @ExceptionBundle Annotation ( the extension, at runtime, will generate a concrete "AllExceptionsImplementation" with all methods annotated:
 
 ```
 
-
-@ExceptionBundle(projectCode = "FLW")
+@ExceptionBundle(projectCode = "QEEX")
 public interface AllExceptions {
 
-    @Message(code= 123, message = "simpe exception for client", httpCode=402)
+    @Message(id= 101, message = "simpe exception for client", code=402)
     QuarkusWebException simpleException();
     
-    @Message(code= 12333, message = "simpe exception for client", httpCode=402)
-    QuarkusWebException simpleException();
+    @Message(id= 102, message = "simpe exception for client", code=402)
+    QuarkusWebException complexException();
 
 }
 ```
-and we will use in our project in this way:
+We will @Inject in our Rest Services methods:
 
 ```
+
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/hello")
+public class GreetingResource {
 
     @Inject
     AllExceptions allExceptions;
@@ -160,27 +167,27 @@ and we will use in our project in this way:
     public String hello() throws QEx {
         throw allExceptions.simpleException();
     }
+}
     
 ```
-The client will receive with httpCode 402, and a message as:
+The client will receive with HttpCode 402, and a message as:
 
-{
-        projectName ='quarkus';
-        code = 134;
-        message = 2                                                              w;
-        language = IT;
-}
+    {
+        "projectName": "QEEX",
+        "code": 101,
+        "message": "simpe exception for client"                                                        
+    }
 
 
 ### Application properties declarations
 
-The alternative use is:
+In alternative we can define messages inside quarkus application.properties :
 
 
 ```
-import it.ness.qex.annotations.ExceptionBundle;
-import it.ness.qex.annotations.Message;
-import it.ness.qex.annotations.QEx;
+import it.ness.qeex.annotations.ExceptionBundle;
+import it.ness.qeex.annotations.Message;
+import it.ness.qeex.annotations.QuarkusWebException;
 
 @ExceptionBundle(projectCode = "FLW")
 public interface AllExceptions {
@@ -201,20 +208,14 @@ and we can define all error messages in application properties:
 
 ```
 quarkus.qeex.projectCode=FLW
-quarkus.qeex.default.code=100
-quarkus.qeex.default.httpCode=500
-quarkus.qeex.default.language=it
+quarkus.qeex.default.id=100
+quarkus.qeex.default.code=500
 
-quarkus.qeex.exceptions.101.it.message=semplice eccezione
-quarkus.qeex.exceptions.101.it.httpCode=402
-quarkus.qeex.exceptions.101.en.message=sample exception
-quarkus.qeex.exceptions.101.en.httpCode=402
+quarkus.qeex.exceptions.101.message=semplice eccezione
+quarkus.qeex.exceptions.101.httpCode=402
 
-quarkus.qeex.exceptions.102.it.message=semplice eccezione 102
-quarkus.qeex.exceptions.102.en.message=sample exception 102
-
-quarkus.qeex.exceptions.103.it.message=sovrascrivo 103
-quarkus.qeex.exceptions.103.en.message=override 103
+quarkus.qeex.exceptions.102.message=semplice eccezione 102
+quarkus.qeex.exceptions.103.message=sovrascrivo 103
 ```
 
 ## Notes
