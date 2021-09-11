@@ -3,7 +3,7 @@
 
 Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
 - JBoss logging tools about the use of annotations inside a well knowed interface
-- <T extends javax.ws.rs.WebApplicationException>
+- T extends javax.ws.rs.WebApplicationException
 - javax.ws.rs.ext.ExceptionMapper to generate custom rest Exception 
 
 ## Getting Started
