@@ -1,8 +1,8 @@
 # 'Qeex' - Quarkus web application Error EXtension 
 
-Quarkus extension to generate Rest Exception in declative way. Stringly inspired by:
+Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
 - JBoss logging tools about the use of annotations inside a well knowed interface
--  QuarkusWebException that extendsjavax.ws.rs.WebApplicationException
+- T extendsjavax.ws.rs.WebApplicationException
 - javax.ws.rs.ext.ExceptionMapper to generate custom excewption 
 
 ## Getting Started
@@ -195,7 +195,10 @@ import it.ness.qex.annotations.QEx;
 @ExceptionBundle(projectCode = "FLW")
 public interface AllExceptions {
 
-    @Message(code= 123, message = "prova", httpCode=402)
+    @Message(code= 123, message = "simpe exception for client", httpCode=402)
+    QEx simpleException();
+    
+    @Message(code= 12333, message = "simpe exception for client", httpCode=402)
     QEx simpleException();
 
 }
@@ -226,7 +229,35 @@ The client will receive with httpCode 402, and a message as:
 
 ### Application properties declarations
 
+The alternative use is:
 
+
+```
+
+import it.ness.qex.annotations.ExceptionBundle;
+import it.ness.qex.annotations.Message;
+import it.ness.qex.annotations.QEx;
+
+@ExceptionBundle(projectCode = "FLW")
+public interface AllExceptions {
+
+    @Message(code= 123)
+    QEx simpleException();
+
+}
+```
+
+and define all messages in application properties:
+
+
+```
+quarkus.qeex.projectCode=FLW
+quarkus.qeex.defaultHttpCode=402
+quarkus.qeex.exceptions.123.it.message=semplice eccezione
+quarkus.qeex.exceptions.123.it.httpCode=402
+quarkus.qeex.exceptions.123.en.message=sample exception
+quarkus.qeex.exceptions.123.en.httpCode=402
+```
 
 
 
