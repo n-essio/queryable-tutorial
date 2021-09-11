@@ -1,7 +1,5 @@
-# "Qeex" - Quarkus web application Error EXtension 
+# "Qeex" - Quarkus web application Error EXtension  :green_circle: :white_circle: :red_circle:
 
-- :red_circle:
-- :green_circle:
 
 Quarkus extension to generate Rest Exception in declative way. Strongly inspired by:
 - JBoss logging tools about the use of annotations inside a well knowed interface
