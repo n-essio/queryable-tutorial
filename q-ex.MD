@@ -93,6 +93,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ExceptionBundle {
 
     String projectCode();
+    int code();
 }
 
 ```
@@ -252,7 +253,9 @@ and define all messages in application properties:
 
 ```
 quarkus.qeex.projectCode=FLW
-quarkus.qeex.defaultHttpCode=402
+quarkus.qeex.default.httpCode=402
+quarkus.qeex.default.language=it
+
 quarkus.qeex.exceptions.123.it.message=semplice eccezione
 quarkus.qeex.exceptions.123.it.httpCode=402
 quarkus.qeex.exceptions.123.en.message=sample exception
