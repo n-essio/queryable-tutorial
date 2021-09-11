@@ -3,8 +3,22 @@
 This is a Quarkus extension for generate Rest Exception in declarative way.
 Strongly inspired by:
 - JBoss logging tools - about the use of annotations inside an annotated interface
-- jax-rs WebApplicationException
-- jax-rs ExceptionMapper to provide customs Exceptions
+
+This extension will provide:
+- jax-rs ExceptionMapper that will generate custom json exception messages, ie:
+```
+
+HTTP STATUS: 500
+RESPONSE ENTITY:
+{
+    "projectName": "XXXXX",
+    "code": 101,
+    "message": "simpe message for client"                                                        
+}
+```
+
+TODO:
+- provides support for the internationalization and localization of exception messages.
 
 ## What the extension offers by design
 
@@ -205,12 +219,13 @@ public class GreetingResource {
 ```
 The client will receive with HttpCode 402, and a message as:
 
+```
     {
         "projectName": "QEEX",
         "code": 101,
         "message": "simpe exception for client"                                                        
     }
-
+```
 
 ### Application properties declarations
 
