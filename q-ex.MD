@@ -178,10 +178,45 @@ public @interface Message {
 }
 
 ```
-
-
+How to use? Follows the 2 way:
+- using annotations
+- using application properties
 
 ### Annotations use cases
+
+We will create a class annotated with ExceptionBundle Annotation, that at runtime will have the Implementation
+
+```
+
+import it.ness.qex.annotations.ExceptionBundle;
+import it.ness.qex.annotations.Message;
+import it.ness.qex.annotations.QEx;
+
+@ExceptionBundle(projectCode = "FLW")
+public interface AllExceptions {
+
+    @Message(value = "prova")
+    QEx simpleException();
+
+}
+```
+and we will use in our project in this way:
+
+```
+
+
+    @Inject
+    AllExceptions allExceptions;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String hello() throws QEx {
+        throw allExceptions.simpleException();
+//        return "Hello RESTEasy";
+    }
+```
+
+What do you t
 
 ### Application properties declarations
 
