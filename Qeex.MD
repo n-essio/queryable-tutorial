@@ -223,7 +223,7 @@ public class GreetingResource {
 }
     
 ```
-The client will receive with HttpCode 402, and a message as:
+The client will receive with HttpCode 500, and a message as:
 
 ```json
     {
