@@ -266,14 +266,17 @@ quarkus.qeex.default.id=100
 quarkus.qeex.default.code=500
 
 ## 101 => message: semplice eccezione 101 , code: 500 (default)
-quarkus.qeex.exceptions.101.message=semplice eccezione 101
+quarkus.qeex.messages[0].id=101
+quarkus.qeex.messages[0].message=semplice eccezione 101
+
 
 ## 102 => semplice eccezione 102 , code: 403
-quarkus.qeex.exceptions.102.message=semplice eccezione 102
-quarkus.qeex.exceptions.102.message=403
+quarkus.qeex.messages[1].id=102
+quarkus.qeex.messages[2].code=403
 
 ## 103 => simpleException103() => implicit id and code, message: semplice eccezione 103
-quarkus.qeex.exceptions.103.message=semplice eccezione 103
+quarkus.qeex.messages[3].id=103
+quarkus.qeex.messages[3].message=semplice eccezione 103
 
 ```
 
