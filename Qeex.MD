@@ -272,11 +272,11 @@ quarkus.qeex.messages[0].message=semplice eccezione 101
 
 ## 102 => semplice eccezione 102 , code: 403
 quarkus.qeex.messages[1].id=102
-quarkus.qeex.messages[2].code=403
+quarkus.qeex.messages[1].code=403
 
 ## 103 => simpleException103() => implicit id and code, message: semplice eccezione 103
-quarkus.qeex.messages[3].id=103
-quarkus.qeex.messages[3].message=semplice eccezione 103
+quarkus.qeex.messages[2].id=103
+quarkus.qeex.messages[2].message=semplice eccezione 103
 
 ```
 
