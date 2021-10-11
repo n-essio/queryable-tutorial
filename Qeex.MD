@@ -12,7 +12,7 @@ RESPONSE ENTITY:
 ```json
 {
     "project": "XXXXX",
-    "code": 101,
+    "id": 101,
     "message": "simpe message for client"                                                        
 }
 ```
@@ -41,7 +41,7 @@ That Object will be translated in json:
 ```json
 {
     "project": "XXXXX",
-    "code": 101,
+    "id": 101,
     "message": "yyyyyyy"                                                        
 }
 ```
@@ -73,9 +73,9 @@ public class QuarkusWebException extends Exception {
 ```
 Where:
 - "id" is the uuid of message exception
-- "code" is the https code for the response
--  "project" is bundle name of exceptions
--  "message" is the exception message
+- "code" is the http code for the response
+- "project" is bundle name of exceptions
+- "message" is the exception message
 
 A custom ExceptionMapper that will generates Rest Response with inside out Messages:
 
@@ -228,7 +228,7 @@ The client will receive with HttpCode 500, and a message as:
 ```json
     {
         "project": "QEEX",
-        "code": 101,
+        "id": 101,
         "message": "simpe exception for client"                                                        
     }
 ```
