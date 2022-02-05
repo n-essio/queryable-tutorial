@@ -42,7 +42,7 @@ Installiamo le estensioni Quarkus:
 Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 
 ```
-./mvnw it.n-ess.queryable:queryable-maven-plugin:1.0.12:add
+./mvnw it.n-ess.queryable:queryable-maven-plugin:1.0.13:add
 ./mvnw queryable:install
 ```
 ### Siamo pronti per definire i nostri JPA Entities.
@@ -198,14 +198,14 @@ public static final String TEAMS_PATH = API_PATH + "/teams";
 @Table(name = "teams")
 @QRs(TEAMS_PATH)
 @QOrderBy("name asc")
-@FilterDef(name = "like.tagses", parameters = @ParamDef(name = "tagses", type = "string"))
-@Filter(name = "like.tagses", condition = "lower(tagses) LIKE :tagses")
-@FilterDef(name = "obj.uuid", parameters = @ParamDef(name = "uuid", type = "string"))
-@Filter(name = "obj.uuid", condition = "uuid = :uuid")
-@FilterDef(name = "obj.uuids", parameters = @ParamDef(name = "uuids", type = "string"))
-@Filter(name = "obj.uuids", condition = "uuid IN (:uuids)")
-@FilterDef(name = "like.name", parameters = @ParamDef(name = "name", type = "string"))
-@Filter(name = "like.name", condition = "lower(name) LIKE :name")
+@FilterDef(name = "Team.like.tagses", parameters = @ParamDef(name = "tagses", type = "string"))
+@Filter(name = "Team.like.tagses", condition = "lower(tagses) LIKE :tagses")
+@FilterDef(name = "Team.obj.uuid", parameters = @ParamDef(name = "uuid", type = "string"))
+@Filter(name = "Team.obj.uuid", condition = "uuid = :uuid")
+@FilterDef(name = "Team.obj.uuids", parameters = @ParamDef(name = "uuids", type = "string"))
+@Filter(name = "Team.obj.uuids", condition = "uuid IN (:uuids)")
+@FilterDef(name = "Team.like.name", parameters = @ParamDef(name = "name", type = "string"))
+@Filter(name = "Team.like.name", condition = "lower(name) LIKE :name")
 public class Team extends PanacheEntityBase {
 ```
 
@@ -302,7 +302,7 @@ version: '2'
 services:
   postgresql:
     container_name: myteam
-    image: postgres:11.8-alpine
+    image: postgres:13-alpine
     environment:
       POSTGRES_PASSWORD: myteam
       POSTGRES_USER: myteam
