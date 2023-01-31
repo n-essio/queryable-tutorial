@@ -24,7 +24,7 @@ Cominciamo con la creazione di un progetto Quarkus, con le estensioni per Hibern
 Comandi maven da eseguire in sequenza
 
 ```
-mvn io.quarkus.platform:quarkus-maven-plugin:2.7.0.Final:create \
+mvn io.quarkus.platform:quarkus-maven-plugin:2.16.0.Final:create \
         -DprojectGroupId=it.queryable \
         -DprojectArtifactId=myteam \
         -DclassName="it.queryable.myteam.service.rs.GreetingResource" \
