@@ -13,7 +13,9 @@ RESPONSE ENTITY:
 {
     "project": "XXXXX",
     "id": 101,
-    "message": "simpe message for client"                                                        
+    "code": 500,
+    "message": "simpe message for client"     
+    "language": "it"
 }
 ```
 
@@ -25,53 +27,77 @@ TODO:
 A custom ExceptionMessage that contains some utils fields to client:
 
 ```java
-public class ExceptionMessage {
-    public String project;
+public class QeexWebException {
+    public String projectName;
     public int id;
+    public int code;
     public String message;
+    public String language;
 
-    public ExceptionMessage(String project, int id, String message) {
-        this.project = project;
+
+    protected QeexWebException() {
+    }
+
+    public static QeexWebException builder(String projectName) {
+        var quex = new QeexWebException();
+        quex.projectName = projectName;
+        return quex;
+    }
+
+    public QeexWebException id(int id) {
         this.id = id;
+        return this;
+    }
+
+    public QeexWebException code(int code) {
+        this.code = code;
+        return this;
+    }
+
+    public QeexWebException message(String message) {
         this.message = message;
+        return this;
+    }
+
+    public QeexWebException language(String language) {
+        this.language = language;
+        return this;
+    }
+
+
+    public String toJson() {
+        return "{\"projectName\":\"" + this.projectName + "\"," +
+                "\"id\":" + this.id + ", " +
+                "\"code\":" + this.code + ", " +
+                "\"message\":\"" + this.message + "\", " +
+                "\"language\":\"" + this.language + "\"" +
+                "}";
+    }
+
+    @Override
+    public String toString() {
+        return "QuarkusWebException{" +
+                "projectName='" + projectName + '\'' +
+                ", id=" + id +
+                ", code=" + code +
+                ", message='" + message + '\'' +
+                ", language='" + language + '\'' +
+                '}';
     }
 }
+
 ```
 That Object will be translated in json:
 ```json
 {
     "project": "XXXXX",
     "id": 101,
-    "message": "yyyyyyy"                                                        
+    "code": 400,
+    "message": "simpe message for client"     
+    "language": "it"                                                    
 }
 ```
-That message will be generated dinamically using a custom Exception:
-
-```java
-public class QuarkusWebException extends Exception {
-    public String project;    // (:one:)
-    public int id;              // (:two:)
-    public int code;          // (:three:)
-    public String message;        // (:four:)
-
-    public QuarkusWebException(String project,
-               int id,
-               int code,
-               String message) {
-        super();
-        this.project = project;
-        this.id = id;
-        this.code = code;
-        this.message = message;
-    }
-    
-    public ExceptionMessage msg() {
-        return new ExceptionMessage(this.project, this.id, this.message);
-    }
-
-}
-```
-Where:
+That message will be generated dinamically using the custom Exception, where:
 - "id" is the uuid of message exception
 - "code" is the http code for the response
 - "project" is bundle name of exceptions
@@ -80,25 +106,23 @@ Where:
 A custom ExceptionMapper that will generates Rest Response with inside out Messages:
 
 ```java
-import javax.ws.rs.core.Context;
+import io.quarkus.qeex.api.exceptions.QeexWebException;
+
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class QuarkusWebExceptionProvider implements ExceptionMapper<QuarkusWebException> {
-
-  //  @Context
-  //  UriInfo uriInfo;
+public class QuarkusWebExceptionProvider implements ExceptionMapper<QeexWebException> {
 
     @Override
-    public Response toResponse(QuarkusWebException exception) {
-        exception.printStackTrace();
-       // String language = uriInfo.getQueryParameters().getFirst("language");
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response toResponse(QeexWebException exception) {
         return Response
                 .status(exception.code)
-                .entity(exception.msg())
+                .entity(exception.toJson())
                 .build();
     }
 }
@@ -117,11 +141,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ TYPE })
 @Retention(RUNTIME)
 @Documented
-public @interface ExceptionBundle {
+public @interface QeexExceptionBundle {
 
     String project();
     int id() default 100;
     int code() default 400;
+    String language();
+    String message() default "";
 }
 
 ```
@@ -129,22 +155,25 @@ public @interface ExceptionBundle {
 We need also to define:
 
 ```java
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.CLASS;
-
+import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Target(METHOD)
-@Retention(CLASS)
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Qualifier
+@Target({METHOD})
+@Retention(RUNTIME)
 @Documented
-public @interface Message {
+public @interface QeexMessage {
 
     int id() default -1;
-    String message();
-    int code() default 400;
 
+    String message() default "";
+
+    int code() default 400;
 }
 
 ```
