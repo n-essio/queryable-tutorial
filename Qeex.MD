@@ -176,35 +176,8 @@ public @interface QeexMessage {
     int code() default 400;
 }
 
-```
 
-## Coordinates
-After configuring `quarkus BOM`:
-
-```xml
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-bom</artifactId>
-            <version>${insert.newest.quarkus.version.here}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-```
-
-You can just configure the `quarkus-qex` extension by adding the following dependency:
-
-```xml
-<dependency>
-    <groupId>io.quarkiverse.qex</groupId>
-    <artifactId>quarkus-qeex</artifactId>
-    <version>${latest.release.version}</version>
-</dependency>
-```
-
+`````
 ## Usage
 
 We can define our exceptions messages in 2 way:
@@ -216,21 +189,32 @@ We can define our exceptions messages in 2 way:
 In our proiject, we will create a class annotated with @ExceptionBundle Annotation ( the extension, at runtime, will generate a concrete "AllExceptionsImplementation" with all methods annotated:
 
 ```java
+import io.quarkus.qeex.api.annotations.QeexExceptionBundle;
+import io.quarkus.qeex.api.annotations.QeexMessage;
+import io.quarkus.qeex.api.exceptions.QeexWebException;
 
-@ExceptionBundle(project = "QEEX")
-public interface AllExceptions {
+@QeexExceptionBundle(project = "FLW", language = "it")
+public interface ExceptionBundle {
 
-    @Message(id= 101, message = "simpe exception for client", code=500)
-    QuarkusWebException simpleException();
-    
-    @Message(id= 102, message = "simpe exception for client", code=503)
-    QuarkusWebException complexException();
+    @QeexMessage(message = "prova")
+    QeexWebException simpleException();
+
+    @QeexMessage(id = 102, code = 400, message = " complete e ricmplete")
+    QeexWebException completeException();
+
+    @QeexMessage(id = 103, code = 500, message = "non sovrascitto")
+    QeexWebException notOverrideException();
+
+    @QeexMessage(id = 104, code = 500, message = "one: %s - two: %s")
+    QeexWebException withArguments(String one, String two);
 
 }
 ```
 We will @Inject in our Rest Services methods:
 
 ```java
+
+import org.acme.quex.exception.ExceptionBundle;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -242,70 +226,80 @@ import javax.ws.rs.core.MediaType;
 public class GreetingResource {
 
     @Inject
-    AllExceptions allExceptions;
+    ExceptionBundle exceptionBundle;
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/1")
+    @Produces(MediaType.APPLICATION_JSON)
     public String hello() throws Exception {
-        throw allExceptions.simpleException();
+        throw exceptionBundle.simpleException();
     }
-}
     
 ```
 The client will receive with HttpCode 500, and a message as:
 
 ```json
     {
-        "project": "QEEX",
-        "id": 101,
-        "message": "simpe exception for client"                                                        
+        "projectName": "FLW",
+        "id": 0,
+        "code": 400,
+        "message": "non va ancora 101",
+        "language": "it"
     }
 ```
 
 ### Application properties declarations
 
-We can define messages inside quarkus application.properties :
-
+To use the java methods:
 
 ```java
-import it.ness.qeex.annotations.ExceptionBundle;
-import it.ness.qeex.annotations.Message;
-import it.ness.qeex.annotations.QuarkusWebException;
 
-@ExceptionBundle(project = "FLW")
-public interface AllExceptions {
+import io.quarkus.qeex.api.annotations.QeexExceptionBundle;
+import io.quarkus.qeex.api.annotations.QeexMessage;
+import io.quarkus.qeex.api.exceptions.QeexWebException;
 
-    @Message(id= 101)
-    QuarkusWebException simpleException101();
-    
-    @Message(id= 102)
-    QuarkusWebException simpleException102();
-    
-    @Message() 
-    QuarkusWebException simpleException103();
+@QeexExceptionBundle(project = "FLW", language = "it")
+public interface ExceptionBundle {
+
+    @QeexMessage(message = "prova")
+    QeexWebException simpleException();
+
+    @QeexMessage(id = 102, code = 400, message = " complete e ricmplete")
+    QeexWebException completeException();
+
+    @QeexMessage(id = 103, code = 500, message = "non sovrascitto")
+    QeexWebException notOverrideException();
+
+    @QeexMessage(id = 104, code = 500, message = "one: %s - two: %s")
+    QeexWebException withArguments(String one, String two);
 
 }
 ```
 
-and we can define all error messages in application properties:
+we ,ust define all error messages in application properties:
 
 ```properties
-quarkus.qeex.project=FLW
-quarkus.qeex.default.id=100
-quarkus.qeex.default.code=500
 
-## 101 => message: semplice eccezione 101 , code: 500 (default)
-quarkus.qeex.messages[0].id=101
-quarkus.qeex.messages[0].message=semplice eccezione 101
+# global configuration
+qeex.project=FLW
+qeex.default.id=100
+qeex.default.code=400
+qeex.default.language=it
+qeex.default.message=default message for FLW project
 
+#override of 101 execption configuration
+qeex.messages[0].id=101
+qeex.messages[0].code=400
+qeex.messages[0].message=non va ancora 101
+qeex.messages[0].language.en=is not ok 101
+qeex.messages[0].language.fr=c'esta pas ok 101
 
-## 102 => semplice eccezione 102 , code: 403
-quarkus.qeex.messages[1].id=102
-quarkus.qeex.messages[1].code=403
-
-## 103 => simpleException103() => implicit id and code, message: semplice eccezione 103
-quarkus.qeex.messages[2].id=103
-quarkus.qeex.messages[2].message=semplice eccezione 103
+#override of 102 execption configuration
+qeex.messages[1].id=102
+qeex.messages[1].code=500
+qeex.messages[1].message=non va ancora 102
+qeex.messages[1].language.en=is not ok again 101
+qeex.messages[1].language.fr=c'esta pas ancore ok 101
 
 ```
 
