@@ -1,4 +1,4 @@
-# "Qeex"- Quarkus web application Error EXtension
+# "Qeex"- Quarkus web application Error EXtension (static example)[https://github.com/n-essio/qeex]
 
 This is a Quarkus extension for generate Rest Exception in declarative way.
 Strongly inspired by:
