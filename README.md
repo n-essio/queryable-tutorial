@@ -24,7 +24,7 @@ Cominciamo con la creazione di un progetto Quarkus, con le estensioni per Hibern
 Comandi maven da eseguire in sequenza
 
 ```
-mvn io.quarkus.platform:quarkus-maven-plugin:2.16.0.Final:create \
+mvn io.quarkus.platform:quarkus-maven-plugin:3.4.1:create \
         -DprojectGroupId=it.queryable \
         -DprojectArtifactId=myteam \
         -DclassName="it.queryable.myteam.service.rs.GreetingResource" \
@@ -42,7 +42,7 @@ Installiamo le estensioni Quarkus:
 Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 
 ```
-./mvnw it.n-ess.queryable:queryable-maven-plugin:1.0.14:add
+./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.0:add
 ./mvnw queryable:install
 ```
 ### Siamo pronti per definire i nostri JPA Entities.
@@ -444,8 +444,8 @@ e vedremo nella SHELL:
 #### A questo punto, qualche query REST:
 
 ```
-http://localhost:8080/api/developers/5915fe2b-bb95-440a-b895-889de7f8808c
-http://localhost:8080/api/developers?like.surname=fi
+http://localhost:8080/api/developershttp://localhost:8080/api/developers?obj.uuid=0e158a58-5fa4-40f0-956f-ba61cd916e9c
+http://localhost:8080/api/developers?like.surname=pi
 http://localhost:8080/api/developers?obj.team_uuid=081fa2b1-fffc-4797-81fc-cfb54a866fcf
 
 ```
