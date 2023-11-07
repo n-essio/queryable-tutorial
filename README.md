@@ -70,6 +70,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import static it.queryable.myteam.management.AppConstants.TEAMS_PATH;
 
@@ -103,6 +104,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import static it.queryable.myteam.management.AppConstants.DEVELOPERS_PATH;
 
