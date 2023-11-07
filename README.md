@@ -42,7 +42,7 @@ Installiamo le estensioni Quarkus:
 Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 
 ```
-./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.2:add
+./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.3:add
 ./mvnw queryable:install
 ```
 ### Siamo pronti per definire i nostri JPA Entities.
@@ -72,11 +72,8 @@ import it.ness.queryable.annotations.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import static it.queryable.myteam.management.AppConstants.TEAMS_PATH;
-
 @Entity
 @Table(name = "teams")
-@QRs(TEAMS_PATH)
 @QOrderBy("name asc")
 public class Team extends PanacheEntityBase {
 
@@ -106,14 +103,12 @@ import it.ness.queryable.annotations.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import static it.queryable.myteam.management.AppConstants.DEVELOPERS_PATH;
 
 //    Developer (uuid, name, surname, team_uuid, active)
 
 
 @Entity
 @Table(name = "developers")
-@QRs(DEVELOPERS_PATH)
 @QOrderBy("surname asc")
 public class Developer extends PanacheEntityBase {
 
@@ -146,19 +141,18 @@ package it.queryable.myteam.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static it.queryable.myteam.management.AppConstants.PROJECTS_PATH;
 
 // - Project (uuid, name, budget, developers_uuid)
 
 @Entity
 @Table(name = "projects")
-@QRs(PROJECTS_PATH)
 @QOrderBy("name asc")
 public class Project extends PanacheEntityBase {
 
@@ -196,15 +190,14 @@ public class Project extends PanacheEntityBase {
 ```
 @Entity
 @Table(name = "teams")
-@QRs(TEAMS_PATH)
 @QOrderBy("name asc")
-@FilterDef(name = "Team.like.tagses", parameters = @ParamDef(name = "tagses", type = "string"))
+@FilterDef(name = "Team.like.tagses", parameters = @ParamDef(name = "tagses", type = String.class))
 @Filter(name = "Team.like.tagses", condition = "lower(tagses) LIKE :tagses")
-@FilterDef(name = "Team.obj.uuid", parameters = @ParamDef(name = "uuid", type = "string"))
+@FilterDef(name = "Team.obj.uuid", parameters = @ParamDef(name = "uuid", type = String.class))
 @Filter(name = "Team.obj.uuid", condition = "uuid = :uuid")
-@FilterDef(name = "Team.obj.uuids", parameters = @ParamDef(name = "uuids", type = "string"))
+@FilterDef(name = "Team.obj.uuids", parameters = @ParamDef(name = "uuids", type = String.class))
 @Filter(name = "Team.obj.uuids", condition = "uuid IN (:uuids)")
-@FilterDef(name = "Team.like.name", parameters = @ParamDef(name = "name", type = "string"))
+@FilterDef(name = "Team.like.name", parameters = @ParamDef(name = "name", type = String.class))
 @Filter(name = "Team.like.name", condition = "lower(name) LIKE :name")
 public class Team extends PanacheEntityBase {
 ```
@@ -212,14 +205,9 @@ public class Team extends PanacheEntityBase {
 #### E nella classe REST:
 
 ```
-@Path(TEAMS_PATH)
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-@Singleton
-public class TeamServiceRs extends RsRepositoryServiceV3<Team, String> {
-
-	public TeamServiceRs() {
-		super(Team.class);
+ect) {
+		// field with @id
+		return object.uuid;
 	}
 
 	@Override
@@ -240,7 +228,7 @@ public class TeamServiceRs extends RsRepositoryServiceV3<Team, String> {
 			for (int i = 0; i < tagses.length; i++) {
 				final String paramName = String.format("tags%d", i);
 				sb.append(String.format("tags LIKE :%s", paramName));
-				params.put(paramName, tagses[i]);
+				params.put(paramName, "%" + tagses[i] + "%");
 				if (i < tagses.length - 1) {
 					sb.append(" OR ");
 				}
@@ -259,14 +247,13 @@ public class TeamServiceRs extends RsRepositoryServiceV3<Team, String> {
 			search = Team.find(query, params);
 		}
 		if (nn("obj.uuid")) {
-			search.filter("obj.uuid", Parameters.with("uuid", get("obj.uuid")));
+			search.filter("Team.obj.uuid", Parameters.with("uuid", get("obj.uuid")));
 		}
 		if (nn("obj.uuids")) {
-			String[] uuids = get("obj.uuids").split(",");
-			getEntityManager().unwrap(Session.class).enableFilter("obj.uuids").setParameterList("uuids", uuids);
+			search.filter("Team.obj.uuids", Parameters.with("uuids", asList("obj.uuids")));
 		}
 		if (nn("like.name")) {
-			search.filter("like.name", Parameters.with("name", likeParamToLowerCase("like.name")));
+			search.filter("Team.like.name", Parameters.with("name", likeParamToLowerCase("like.name")));
 		}
 		return search;
 	}
@@ -310,11 +297,10 @@ services:
     ports:
       - '5432:5432'
   pgadmin4:
-    container_name: nso_orders_pgadmin4
+    container_name: pgadmin4
     image: dpage/pgadmin4
     ports:
-      - '5050:5050'
-      - '85:80'
+      - '80:80'
     links:
       - postgresql:postgresql
     depends_on:
@@ -456,7 +442,7 @@ Buon divertimento con **QUARKUS & QUERYABLE**.
 - https://quarkus.io/guides/
 - https://quarkus.io/guides/rest-json
 - https://quarkus.io/guides/hibernate-orm-panache
-- https://docs.jboss.org/hibernate/orm/5.4/userguide/html_single/Hibernate_User_Guide.html#pc-filter
+- https://docs.jboss.org/hibernate/stable/core/userguide/html_single/Hibernate_User_Guide.html#pc-filter
 - https://github.com/n-essio/queryable
 
 
@@ -464,72 +450,3 @@ Buon divertimento con **QUARKUS & QUERYABLE**.
 
 The declared types:
 - https://docs.jboss.org/hibernate/stable/core.old/reference/en/html/mapping-types.html
-
-
-### 5.2.2. Basic value types
-The built-in basic mapping types may be roughly categorized into
-
-integer, long, short, float, double, character, byte, boolean, yes_no, true_false
-Type mappings from Java primitives or wrapper classes to appropriate (vendor-specific) SQL column types. boolean, yes_no and true_false are all alternative encodings for a Java boolean or java.lang.Boolean.
-
-####  string
-A type mapping from java.lang.String to VARCHAR (or Oracle VARCHAR2).
-
-#### date, time, timestamp
-Type mappings from java.util.Date and its subclasses to SQL types DATE, TIME and TIMESTAMP (or equivalent).
-
-####  calendar, calendar_date
-Type mappings from java.util.Calendar to SQL types TIMESTAMP and DATE (or equivalent).
-
-####  big_decimal, big_integer
-Type mappings from java.math.BigDecimal and java.math.BigInteger to NUMERIC (or Oracle NUMBER).
-
-####  locale, timezone, currency
-Type mappings from java.util.Locale, java.util.TimeZone and java.util.Currency to VARCHAR (or Oracle VARCHAR2). Instances of Locale and Currency are mapped to their ISO codes. Instances of TimeZone are mapped to their ID.
-
-####  class
-A type mapping from java.lang.Class to VARCHAR (or Oracle VARCHAR2). A Class is mapped to its fully qualified name.
-
-####  binary
-Maps byte arrays to an appropriate SQL binary type.
-
-####  text
-Maps long Java strings to a SQL CLOB or TEXT type.
-
-####  serializable
-Maps serializable Java types to an appropriate SQL binary type. You may also indicate the Hibernate type serializable with the name of a serializable Java class or interface that does not default to a basic type.
-
-####  clob, blob
-Type mappings for the JDBC classes java.sql.Clob and java.sql.Blob. These types may be inconvenient for some applications, since the blob or clob object may not be reused outside of a transaction. (Furthermore, driver support is patchy and inconsistent.)
-
-####  imm_date, imm_time, imm_timestamp, imm_calendar, imm_calendar_date, imm_serializable, imm_binary
-Type mappings for what are usually considered mutable Java types, where Hibernate makes certain optimizations appropriate only for immutable Java types, and the application treats the object as immutable. For example, you should not call Date.setTime() for an instance mapped as imm_timestamp. To change the value of the property, and have that change made persistent, the application must assign a new (nonidentical) object to the property.
-
-Unique identifiers of entities and collections may be of any basic type except binary, blob and clob. (Composite identifiers are also allowed, see below.)
-
-The basic value types have corresponding Type constants defined on org.hibernate.Hibernate. For example, Hibernate.STRING represents the string type.
-
-## To test in java before use parameters
-
-```java 
-private void verifyParameterInFilter(String filterName, String name, Object value) throws Exception {
-    FilterDefinition definition = getEntityManager().unwrap(Session.class).getSessionFactory()
-            .getFilterDefinition(filterName);
-    Type type = definition.getParameterType(name);
-    if (type == null) {
-        throw new IllegalArgumentException("Undefined filter parameter [" + name + "]");
-    }
-    logger.info("************************************");
-    logger.info("************************************");
-    logger.info("filterName:" + filterName);
-    logger.info("name:" + name);
-    logger.info("value:" + value);
-    logger.info("filter def type: " + type.getName());
-    logger.info("value type: " + value.getClass());
-    if (value != null && !type.getReturnedClass().isAssignableFrom(value.getClass())) {
-        throw new IllegalArgumentException("Incorrect type for parameter [" + name + "]");
-    }
-    logger.info("************************************");
-    logger.info("************************************");
-}
-```
