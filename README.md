@@ -1,4 +1,4 @@
-# 'Getting Started' con Quarkus & Queryable
+# Getting Started con Quarkus & Queryable
 Un tutorial in italiano per mostrare come creare dei microservizi con QUARKUS utilizzando Queryable Maven Plugin.
 
 <img src="https://github.com/n-essio/queryable/blob/main/docs/queryable.png">
@@ -24,7 +24,7 @@ Cominciamo con la creazione di un progetto Quarkus, con le estensioni per Hibern
 Comandi maven da eseguire in sequenza
 
 ```
-mvn io.quarkus.platform:quarkus-maven-plugin:3.4.1:create \
+mvn io.quarkus.platform:quarkus-maven-plugin:3.5.0:create \
         -DprojectGroupId=it.queryable \
         -DprojectArtifactId=myteam \
         -DclassName="it.queryable.myteam.service.rs.GreetingResource" \
@@ -42,7 +42,7 @@ Installiamo le estensioni Quarkus:
 Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 
 ```
-./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.0:add
+./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.2:add
 ./mvnw queryable:install
 ```
 ### Siamo pronti per definire i nostri JPA Entities.
