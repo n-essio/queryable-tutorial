@@ -55,9 +55,9 @@ package it.queryable.myteam.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import static it.queryable.myteam.management.AppConstants.TEAMS_PATH;
 
@@ -90,9 +90,9 @@ package it.queryable.myteam.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import static it.queryable.myteam.management.AppConstants.DEVELOPERS_PATH;
 
@@ -135,7 +135,7 @@ package it.queryable.myteam.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
