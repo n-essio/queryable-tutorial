@@ -47,6 +47,20 @@ Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 ```
 ### Siamo pronti per definire i nostri JPA Entities.
 
+Le rotte dei nostri microservizi le definiamo in AppConstants:
+
+```
+package it.queryable.myteam.management;
+
+public class AppConstants {
+public static final String API_PATH = "/api";
+public static final String DEVELOPERS_PATH = API_PATH + "/developers";
+public static final String GREETING_PATH = API_PATH + "/greetings";
+public static final String PROJECTS_PATH = API_PATH + "/projects";
+public static final String TEAMS_PATH = API_PATH + "/teams";
+}
+```
+
 #### Team
 
 ```
@@ -55,9 +69,7 @@ package it.queryable.myteam.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import static it.queryable.myteam.management.AppConstants.TEAMS_PATH;
 
@@ -90,9 +102,7 @@ package it.queryable.myteam.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import it.ness.queryable.annotations.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import static it.queryable.myteam.management.AppConstants.DEVELOPERS_PATH;
 
@@ -170,19 +180,7 @@ public class Project extends PanacheEntityBase {
 }
 ```
 
-Le rotte dei nostri microservizi le definiamo qui:
 
-```
-package it.queryable.myteam.management;
-
-public class AppConstants {
-public static final String API_PATH = "/api";
-public static final String DEVELOPERS_PATH = API_PATH + "/developers";
-public static final String GREETING_PATH = API_PATH + "/greetings";
-public static final String PROJECTS_PATH = API_PATH + "/projects";
-public static final String TEAMS_PATH = API_PATH + "/teams";
-}
-```
 
 
 ### Per generare le classi REST ed i filtri Hibernate nei nostri entities, lanciamo il comando:
