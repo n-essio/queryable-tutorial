@@ -29,7 +29,7 @@ mvn io.quarkus.platform:quarkus-maven-plugin:3.17.8:create \
         -DprojectArtifactId=myteam \
         -DclassName="it.queryable.myteam.service.rs.GreetingResource" \
         -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache" \        
-        -Dpath="/myteam"
+        -Dpath="/myteam" \
         -DnoCode
 cd myteam
 
