@@ -27,8 +27,7 @@ Comandi maven da eseguire in sequenza
 mvn io.quarkus.platform:quarkus-maven-plugin:3.17.8:create \
         -DprojectGroupId=it.queryable \
         -DprojectArtifactId=myteam \
-        -DclassName="it.queryable.myteam.service.rs.GreetingResource" \
-        -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache" \        
+        -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache" \
         -Dpath="/myteam" \
         -DnoCode
 cd myteam
@@ -69,10 +68,14 @@ public static final String TEAMS_PATH = API_PATH + "/teams";
 package it.queryable.myteam.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import it.ness.queryable.annotations.*;
-
-import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
+import it.ness.queryable.annotations.QLike;
+import it.ness.queryable.annotations.QLikeList;
+import it.ness.queryable.annotations.QList;
+import it.ness.queryable.annotations.QOrderBy;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "teams")
