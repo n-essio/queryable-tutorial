@@ -237,9 +237,6 @@ ect) {
 		} else {
 			search = Team.find(query, params);
 		}
-		if (nn("obj.uuid")) {
-			search.filter("Team.obj.uuid", Parameters.with("uuid", get("obj.uuid")));
-		}
 		if (nn("obj.uuids")) {
 			search.filter("Team.obj.uuids", Parameters.with("uuids", asList("obj.uuids")));
 		}
