@@ -137,12 +137,13 @@ public class Developer extends PanacheEntityBase {
 ```
 package it.queryable.myteam.model;
 
-
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import it.ness.queryable.annotations.*;
-import org.hibernate.annotations.GenericGenerator;
-
+import it.ness.queryable.annotations.Q;
+import it.ness.queryable.annotations.QLike;
+import it.ness.queryable.annotations.QList;
+import it.ness.queryable.annotations.QOrderBy;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -170,6 +171,7 @@ public class Project extends PanacheEntityBase {
     public List<String> developers_uuid;
 
 }
+
 ```
 
 
