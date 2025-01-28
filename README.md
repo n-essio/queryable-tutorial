@@ -38,7 +38,7 @@ cd myteam
 Abbiamo anche installato le varie estensioni Quarkus:
 
 ```
-,,, -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache"
+ jdbc-postgresql,resteasy-jackson,hibernate-orm-panache
 ```
 
 Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
