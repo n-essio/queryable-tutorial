@@ -24,25 +24,27 @@ Cominciamo con la creazione di un progetto Quarkus, con le estensioni per Hibern
 Comandi maven da eseguire in sequenza
 
 ```
-mvn io.quarkus.platform:quarkus-maven-plugin:3.5.0:create \
+mvn io.quarkus.platform:quarkus-maven-plugin:3.17.8:create \
         -DprojectGroupId=it.queryable \
         -DprojectArtifactId=myteam \
         -DclassName="it.queryable.myteam.service.rs.GreetingResource" \
+        -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache" \        
         -Dpath="/myteam"
+        -DnoCode
 cd myteam
 
 ```
 
-Installiamo le estensioni Quarkus:
+Abbiamo anche installato le varie estensioni Quarkus:
 
 ```
-./mvnw quarkus:add-extension -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache"
+,,, -Dextensions="jdbc-postgresql,resteasy-jackson,hibernate-orm-panache"
 ```
 
 Aggiungiamo la dipendenza Queryable al progetto ed installiamo le api rest:
 
 ```
-./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.3:add
+./mvnw it.n-ess.queryable:queryable-maven-plugin:3.0.4:add
 ./mvnw queryable:install
 ```
 ### Siamo pronti per definire i nostri JPA Entities.
@@ -77,11 +79,8 @@ import org.hibernate.annotations.GenericGenerator;
 @QOrderBy("name asc")
 public class Team extends PanacheEntityBase {
 
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "uuid", unique = true)
+    @UuidGenerator
     @Id
-    @Q
     @QList
     public String uuid;
 
@@ -112,11 +111,8 @@ import org.hibernate.annotations.GenericGenerator;
 @QOrderBy("surname asc")
 public class Developer extends PanacheEntityBase {
 
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "uuid", unique = true)
+    @UuidGenerator
     @Id
-    @Q
     @QList
     public String uuid;
 
@@ -156,11 +152,8 @@ import java.util.List;
 @QOrderBy("name asc")
 public class Project extends PanacheEntityBase {
 
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "uuid", unique = true)
+    @UuidGenerator
     @Id
-    @Q
     @QList
     public String uuid;
 
@@ -193,8 +186,6 @@ public class Project extends PanacheEntityBase {
 @QOrderBy("name asc")
 @FilterDef(name = "Team.like.tagses", parameters = @ParamDef(name = "tagses", type = String.class))
 @Filter(name = "Team.like.tagses", condition = "lower(tagses) LIKE :tagses")
-@FilterDef(name = "Team.obj.uuid", parameters = @ParamDef(name = "uuid", type = String.class))
-@Filter(name = "Team.obj.uuid", condition = "uuid = :uuid")
 @FilterDef(name = "Team.obj.uuids", parameters = @ParamDef(name = "uuids", type = String.class))
 @Filter(name = "Team.obj.uuids", condition = "uuid IN (:uuids)")
 @FilterDef(name = "Team.like.name", parameters = @ParamDef(name = "name", type = String.class))
@@ -284,12 +275,10 @@ quarkus.hibernate-orm.database.generation=update
 #### Nella cartella  /docker folder aggiungeremo il file docker-compose.yml :
 
 ```
-version: '2'
-
 services:
   postgresql:
     container_name: myteam
-    image: postgres:13-alpine
+    image: postgres:14-alpine
     environment:
       POSTGRES_PASSWORD: myteam
       POSTGRES_USER: myteam
@@ -314,8 +303,8 @@ services:
 #### Possiamo quindi lanciare il nostro database:
 
 ```
- docker-compose -f docker/docker-compose.yml down
- docker-compose -f docker/docker-compose.yml up -d
+ docker compose -f docker/docker-compose.yml down
+ docker compose -f docker/docker-compose.yml up -d
 ```
 
 Ed infine:
